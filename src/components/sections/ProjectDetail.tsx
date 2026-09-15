@@ -63,9 +63,24 @@ export function ProjectDetail({ projectId, onClose }: Props) {
               <span>· {PROJECT_STATUS_LABEL[project.status]}</span>
             </div>
             <h2 className="detail-title">{project.title}</h2>
+            <div className="detail-subtitle">{project.category}</div>
           </div>
-          <button type="button" className="detail-close" aria-label="Close project" onClick={onClose}>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          <button
+            type="button"
+            className="detail-close"
+            aria-label="Close project"
+            onClick={onClose}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              aria-hidden="true"
+            >
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
           </button>
@@ -78,7 +93,17 @@ export function ProjectDetail({ projectId, onClose }: Props) {
           </section>
 
           <section className="detail-section">
-            <h3 className="detail-section-title">What it does</h3>
+            <h3 className="detail-section-title">The Problem</h3>
+            <p className="detail-section-text">{project.problem}</p>
+          </section>
+
+          <section className="detail-section">
+            <h3 className="detail-section-title">The Approach</h3>
+            <p className="detail-section-text">{project.approach}</p>
+          </section>
+
+          <section className="detail-section">
+            <h3 className="detail-section-title">Key Features</h3>
             <ul className="detail-highlights">
               {project.highlights.map((h) => (
                 <li key={h}>{h}</li>
@@ -87,7 +112,7 @@ export function ProjectDetail({ projectId, onClose }: Props) {
           </section>
 
           <section className="detail-section">
-            <h3 className="detail-section-title">Architecture</h3>
+            <h3 className="detail-section-title">Implementation</h3>
             <dl className="detail-arch">
               {project.architecture.map((a) => (
                 <div className="detail-arch-row" key={a.node}>
@@ -110,12 +135,24 @@ export function ProjectDetail({ projectId, onClose }: Props) {
           </section>
 
           <footer className="detail-links">
-            <a className="btn btn-primary" href={project.githubUrl} target="_blank" rel="noreferrer">
-              VIEW ON GITHUB
-            </a>
             {project.liveUrl ? (
-              <a className="btn btn-secondary" href={project.liveUrl} target="_blank" rel="noreferrer">
-                LIVE DEMO
+              <a
+                className="detail-external-link"
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span className="project-link-arrow">↗</span> LIVE DEMO
+              </a>
+            ) : null}
+            {project.sourceUrl ? (
+              <a
+                className="detail-external-link"
+                href={project.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span className="project-link-arrow">↗</span> SOURCE CODE
               </a>
             ) : null}
           </footer>

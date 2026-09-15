@@ -14,7 +14,12 @@ body {
   font-size: var(--type-body);
   line-height: var(--leading-body);
   color: var(--color-text);
-  background: var(--color-background);
+  background:
+    radial-gradient(120% 90% at 85% -10%, rgb(36 107 254 / 0.16), transparent 55%),
+    radial-gradient(100% 80% at 0% 100%, rgb(139 92 246 / 0.12), transparent 55%),
+    radial-gradient(90% 70% at 50% 50%, rgb(34 211 238 / 0.06), transparent 60%),
+    var(--color-background);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;

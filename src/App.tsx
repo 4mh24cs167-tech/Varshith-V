@@ -3,13 +3,14 @@ import { Navbar, NAV_IDS } from "./components/layout/Navbar";
 import { MobileMenu } from "./components/layout/MobileMenu";
 import { Footer } from "./components/layout/Footer";
 import { PageTransition } from "./components/effects/PageTransition";
-import { BlueprintField } from "./components/effects/BlueprintField";
+import { EngineeringField } from "./components/effects/EngineeringField";
 import { TraceCursor } from "./components/effects/TraceCursor";
-import { ConsoleEgg } from "./components/effects/ConsoleEgg";
 import { Hero } from "./components/sections/Hero";
 import { About } from "./components/sections/About";
+import { YvbCo } from "./components/sections/YvbCo";
 import { StatementBand } from "./components/sections/StatementBand";
 import { Work } from "./components/sections/Work";
+import { Skills } from "./components/sections/Skills";
 import { TechMarquee } from "./components/sections/TechMarquee";
 import { Stats } from "./components/sections/Stats";
 import { FAQ } from "./components/sections/FAQ";
@@ -19,7 +20,9 @@ import { useActiveSection } from "./hooks/useActiveSection";
 const SECTION_IDS = [
   "hero",
   "about",
+  "studio",
   "work",
+  "skills",
   "faq",
   "contact",
 ] as const;
@@ -42,7 +45,7 @@ function App() {
       <div className="noise-overlay" aria-hidden="true" />
 
       <div className="app-backdrop" aria-hidden="true">
-        <BlueprintField />
+        <EngineeringField />
         <TraceCursor />
       </div>
 
@@ -63,7 +66,9 @@ function App() {
         <Hero />
         <StatementBand />
         <About />
+        <YvbCo />
         <Work />
+        <Skills />
         <TechMarquee />
         <Stats />
         <FAQ />
@@ -71,7 +76,6 @@ function App() {
       </main>
 
       <Footer inert={menuOpen} />
-      <ConsoleEgg />
     </div>
   );
 }

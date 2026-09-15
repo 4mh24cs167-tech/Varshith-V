@@ -8,3 +8,4 @@ verify-*.txt
 verify.mjs
 .shots/
 _shot.mjs
+verify-gallery.mjs

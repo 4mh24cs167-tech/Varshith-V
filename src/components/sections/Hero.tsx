@@ -15,6 +15,19 @@ export function Hero() {
 
   return (
     <Section id="hero" className="hero">
+      <div className="hero-deco" aria-hidden="true">
+        <span className="hero-deco-num tnum">01</span>
+        <span className="hero-deco-rule" />
+        <span className="hero-deco-cross hero-deco-cross--tl tnum" aria-hidden="true">+</span>
+        <span className="hero-deco-cross hero-deco-cross--br tnum" aria-hidden="true">+</span>
+        <span className="hero-deco-coord hero-deco-coord--tl tnum">
+          X·0012.6&nbsp;/&nbsp;Y·0000.8
+        </span>
+        <span className="hero-deco-coord hero-deco-coord--br tnum">
+          SHEET&nbsp;01&nbsp;/&nbsp;PORTFOLIO
+        </span>
+      </div>
+
       <motion.div
         initial={gate}
         whileInView={anim ? "show" : undefined}
@@ -31,7 +44,7 @@ export function Hero() {
             {ROLE_TITLE}
             <br />
             <em>AI Systems</em> Builder
-            <br />&nbsp;CTO — MITM
+
           </motion.h1>
 
           <motion.p variants={fadeUp} className="hero-intro">
@@ -56,7 +69,7 @@ export function Hero() {
           <div className="hero-portrait-main">
             <img
               src={PROFILE_IMAGE}
-              alt="Portrait of Varshith V, full-stack developer and CTO"
+              alt="Portrait of Varshith V, full-stack developer"
               width={340}
               height={340}
               fetchPriority="high"

@@ -7,7 +7,7 @@ export function About() {
   const reduce = useReducedMotion();
   const anim = !reduce;
   const facts = [
-    { label: "ROLE", value: "CTO — 4 open-source systems" },
+    { label: "ROLE", value: "Full-Stack · 6 systems shipped" },
     { label: "DEGREE", value: ROLE_ORGS },
     { label: "CGPA", value: `${CGPA}` },
   ];

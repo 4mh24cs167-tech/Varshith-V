@@ -1,5 +1,7 @@
 export const GITHUB_ORG_URL = "https://github.com/4mh24cs167-tech";
 
+export const YVBCO_URL = "https://yvb-co.vercel.app";
+
 export const LINKEDIN_URL = "https://www.linkedin.com/in/varshith-v-812585275";
 
 export const EMAIL = "varshithv252@gmail.com";

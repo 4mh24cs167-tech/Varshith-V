@@ -145,16 +145,6 @@ export function ProjectDetail({ projectId, onClose }: Props) {
                 <span className="project-link-arrow">↗</span> LIVE DEMO
               </a>
             ) : null}
-            {project.sourceUrl ? (
-              <a
-                className="detail-external-link"
-                href={project.sourceUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="project-link-arrow">↗</span> SOURCE CODE
-              </a>
-            ) : null}
           </footer>
         </div>
       </motion.article>

@@ -30,8 +30,6 @@ export type Project = {
   highlights: readonly string[];
   architecture: readonly ArchitectureNode[];
   liveUrl: string | null;
-  sourceUrl: string | null;
-  previewImage: string | null;
   featuredImage: string | null;
   featured: boolean;
 };
@@ -110,8 +108,6 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://uniconv-psi.vercel.app",
-    sourceUrl: null,
-    previewImage: "/images/photo.jpeg",
     featuredImage: null,
     featured: true,
   },
@@ -164,8 +160,6 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://mitm-rd.vercel.app",
-    sourceUrl: "https://github.com/yashas1519-pixel/jnanashodha-portal",
-    previewImage: null,
     featuredImage: null,
     featured: true,
   },
@@ -218,8 +212,6 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://noc-portal-self.vercel.app",
-    sourceUrl: "https://github.com/visheshdevanur/NOC-Portal",
-    previewImage: null,
     featuredImage: null,
     featured: true,
   },
@@ -278,8 +270,6 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://eventflow-indol.vercel.app",
-    sourceUrl: null,
-    previewImage: null,
     featuredImage: null,
     featured: true,
   },
@@ -330,8 +320,6 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://reliefchain-pied.vercel.app",
-    sourceUrl: "https://github.com/4mh24cs167-tech/reliefchain",
-    previewImage: null,
     featuredImage: null,
     featured: true,
   },
@@ -387,8 +375,6 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://mitm-placepro.vercel.app",
-    sourceUrl: null,
-    previewImage: null,
     featuredImage: null,
     featured: false,
   },
@@ -443,8 +429,56 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://petcommunity-puce.vercel.app",
-    sourceUrl: null,
-    previewImage: null,
+    featuredImage: null,
+    featured: false,
+  },
+  {
+    id: "enils",
+    slug: "enils",
+    number: "08",
+    title: "ENILS",
+    shortTitle: "ENILS",
+    category: "Edge-Native Interactive Learning System",
+    tags: ["social impact", "research", "software"],
+    year: null,
+    status: "in development",
+    description:
+      "An offline AI tutoring system designed for schools with limited connectivity. Uses local speech recognition, AI, and text-to-speech to provide voice-based learning without requiring the internet.",
+    longDescription:
+      "ENILS (Edge-Native Interactive Learning System) is an upcoming offline AI tutoring platform built for schools with limited connectivity. All AI capabilities — including speech recognition, tutoring intelligence and text-to-speech — run locally on the device, so students get a fully voice-based interactive learning experience without relying on the internet. The system is designed to work on low-cost hardware found in under-served classrooms.",
+    problem:
+      "Millions of students in low-connectivity regions are locked out of modern AI-powered learning tools. Almost every tutoring platform assumes a stable internet connection, leaving schools in underserved areas behind.",
+    approach:
+      "Engineered an edge-native architecture where everything runs on-device: local speech recognition transcribes the learner, an on-device AI generates tutoring responses, and text-to-speech reads back aloud. No server round trips during a lesson means tutoring keeps working even where connectivity drops to zero.",
+    technologies: [
+      "Local AI",
+      "Speech Recognition",
+      "Text-to-Speech",
+      "Edge Computing",
+      "Offline-first",
+    ],
+    highlights: [
+      "Voice-based interactive tutoring without internet",
+      "On-device speech recognition and text-to-speech",
+      "Designed for low-cost, low-connectivity school hardware",
+      "Local AI engine — no server dependence during lessons",
+      "Built for under-served classrooms first",
+    ],
+    architecture: [
+      {
+        node: "VOICE",
+        detail: "Local speech recognition converts learner speech into text on device",
+      },
+      {
+        node: "TUTOR",
+        detail: "On-device AI generates responses without any network round trip",
+      },
+      {
+        node: "OUTPUT",
+        detail: "Text-to-speech reads responses aloud in the learner's language",
+      },
+    ],
+    liveUrl: null,
     featuredImage: null,
     featured: false,
   },

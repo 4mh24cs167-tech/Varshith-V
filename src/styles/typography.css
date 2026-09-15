@@ -1,0 +1,111 @@
+@layer components {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .text-display {
+    font-family: var(--font-display);
+    font-size: var(--type-display);
+    font-weight: 800;
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+  }
+
+  .text-display-sm {
+    font-family: var(--font-display);
+    font-size: var(--type-display-sm);
+    font-weight: 800;
+    line-height: var(--leading-display-sm);
+    letter-spacing: var(--tracking-display-sm);
+  }
+
+  .text-h1 {
+    font-family: var(--font-display);
+    font-size: var(--type-h1);
+    font-weight: 700;
+    line-height: var(--leading-h1);
+    letter-spacing: var(--tracking-h1);
+  }
+
+  .text-h2 {
+    font-family: var(--font-display);
+    font-size: var(--type-h2);
+    font-weight: 700;
+    line-height: var(--leading-h2);
+    letter-spacing: var(--tracking-h2);
+  }
+
+  .text-h3 {
+    font-family: var(--font-display);
+    font-size: var(--type-h3);
+    font-weight: 700;
+    line-height: var(--leading-h3);
+    letter-spacing: var(--tracking-h3);
+  }
+
+  .text-statement {
+    font-family: var(--font-display);
+    font-size: var(--type-statement);
+    font-weight: 700;
+    line-height: var(--leading-statement);
+    letter-spacing: var(--tracking-statement);
+  }
+
+  .text-body-lg {
+    font-family: var(--font-sans);
+    font-size: var(--type-body-lg);
+    font-weight: 400;
+    line-height: var(--leading-body-lg);
+  }
+
+  .text-body {
+    font-family: var(--font-sans);
+    font-size: var(--type-body);
+    line-height: var(--leading-body);
+  }
+
+  .text-small {
+    font-family: var(--font-sans);
+    font-size: var(--type-small);
+    line-height: var(--leading-small);
+  }
+
+  .text-meta {
+    font-family: var(--font-mono);
+    font-size: var(--type-meta);
+    line-height: var(--leading-meta);
+    letter-spacing: var(--tracking-meta);
+  }
+
+  .text-micro {
+    font-family: var(--font-mono);
+    font-size: var(--type-micro);
+    line-height: var(--leading-micro);
+    letter-spacing: 0.04em;
+  }
+
+  .text-monospace {
+    font-family: var(--font-mono);
+  }
+
+  .text-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .measure {
+    max-width: var(--measure);
+  }
+
+  .measure-narrow {
+    max-width: var(--measure-narrow);
+  }
+}

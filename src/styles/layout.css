@@ -1,0 +1,66 @@
+@layer components {
+  .container {
+    width: 100%;
+    max-width: var(--container-wide);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  [id] {
+    scroll-margin-top: var(--scroll-offset);
+  }
+
+  .section {
+    padding-block: clamp(4.5rem, 10vw, 9rem);
+  }
+
+  .section--compact {
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .section--spacious {
+    padding-block: clamp(5.5rem, 12vw, 11rem);
+  }
+
+  .rule {
+    border: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .ratio-1x1 {
+    aspect-ratio: 1 / 1;
+  }
+
+  .ratio-4x3 {
+    aspect-ratio: 4 / 3;
+  }
+
+  .ratio-3x2 {
+    aspect-ratio: 3 / 2;
+  }
+
+  .ratio-16x9 {
+    aspect-ratio: 16 / 9;
+  }
+
+  .ratio-2x3 {
+    aspect-ratio: 2 / 3;
+  }
+
+  .media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .panel {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .panel--quiet {
+    background-color: transparent;
+    border-color: var(--color-border-faint);
+  }
+}

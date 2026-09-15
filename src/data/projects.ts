@@ -31,6 +31,7 @@ export type Project = {
   architecture: readonly ArchitectureNode[];
   liveUrl: string | null;
   sourceUrl: string | null;
+  previewImage: string | null;
   featuredImage: string | null;
   featured: boolean;
 };
@@ -110,6 +111,7 @@ export const PROJECTS: readonly Project[] = [
     ],
     liveUrl: "https://uniconv-psi.vercel.app",
     sourceUrl: null,
+    previewImage: "/images/photo.jpeg",
     featuredImage: null,
     featured: true,
   },
@@ -163,6 +165,7 @@ export const PROJECTS: readonly Project[] = [
     ],
     liveUrl: "https://mitm-rd.vercel.app",
     sourceUrl: "https://github.com/yashas1519-pixel/jnanashodha-portal",
+    previewImage: null,
     featuredImage: null,
     featured: true,
   },
@@ -216,6 +219,7 @@ export const PROJECTS: readonly Project[] = [
     ],
     liveUrl: "https://noc-portal-self.vercel.app",
     sourceUrl: "https://github.com/visheshdevanur/NOC-Portal",
+    previewImage: null,
     featuredImage: null,
     featured: true,
   },
@@ -275,6 +279,7 @@ export const PROJECTS: readonly Project[] = [
     ],
     liveUrl: "https://eventflow-indol.vercel.app",
     sourceUrl: null,
+    previewImage: null,
     featuredImage: null,
     featured: true,
   },
@@ -326,6 +331,7 @@ export const PROJECTS: readonly Project[] = [
     ],
     liveUrl: "https://reliefchain-pied.vercel.app",
     sourceUrl: "https://github.com/4mh24cs167-tech/reliefchain",
+    previewImage: null,
     featuredImage: null,
     featured: true,
   },
@@ -382,6 +388,7 @@ export const PROJECTS: readonly Project[] = [
     ],
     liveUrl: "https://mitm-placepro.vercel.app",
     sourceUrl: null,
+    previewImage: null,
     featuredImage: null,
     featured: false,
   },
@@ -437,6 +444,7 @@ export const PROJECTS: readonly Project[] = [
     ],
     liveUrl: "https://petcommunity-puce.vercel.app",
     sourceUrl: null,
+    previewImage: null,
     featuredImage: null,
     featured: false,
   },

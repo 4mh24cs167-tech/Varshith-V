@@ -108,16 +108,15 @@ export function Skills() {
         variants={revealGroup}
       >
         <motion.p variants={fadeUp} className="hero-eyebrow">
-          Technical arsenal
+          Technical system
         </motion.p>
         <motion.h2 variants={fadeUp} id="skills-title" className="skills-header-title">
-          Skills &amp;
+          Expertise
           <br />
-          toolbox
+          &amp; tools
         </motion.h2>
         <motion.p variants={fadeUp} className="works-header-sub">
-          Tools, technologies and creative disciplines I work with end to
-          end.
+          Technologies and disciplines I work with end to end.
         </motion.p>
       </motion.div>
 

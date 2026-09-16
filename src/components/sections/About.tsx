@@ -22,7 +22,9 @@ export function About() {
         variants={revealGroup}
       >
         <motion.div variants={fadeUp} className="about-text">
-          <p className="hero-eyebrow">Nice that you have found me.</p>
+          <div className="hero-eyebrow-row">
+            <span className="hero-eyebrow">Nice that you have found me.</span>
+          </div>
           <p>
             I&rsquo;m Varshith, a Computer Science &amp; Engineering student at
             MITM. Most people call me a developer; I think of myself as someone
@@ -41,8 +43,8 @@ export function About() {
         </motion.div>
 
         <motion.dl variants={fadeUp} className="about-facts">
-          {facts.map((f) => (
-            <div key={f.label} className="about-fact">
+          {facts.map((f, i) => (
+            <div key={f.label} className="about-fact" style={{ animationDelay: `${i * 0.1}s` }}>
               <dt className="about-fact-label">{f.label}</dt>
               <dd className="about-fact-value">{f.value}</dd>
             </div>

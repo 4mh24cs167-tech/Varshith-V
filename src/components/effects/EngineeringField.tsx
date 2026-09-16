@@ -1,473 +1,330 @@
 import { useEffect, useRef } from "react";
+import * as THREE from "three";
 
-const DPR_MAX = 2;
-const GRID = 48;
-const alpha = (base: string, a: number) => `rgba(${base},${a})`;
-const INK = "243,242,241";
-const BLUE = "36,107,254";
-const VIOLET = "139,92,246";
-const CYAN = "34,211,238";
-const MAGENTA = "236,72,153";
-const TEAL = "45,212,191";
+const LINE_COUNT = 6;
+const PARTICLE_COUNT = 30;
+const LINE_SEGMENTS = 120;
 
-const ORBS = [
-  { cx: 0.16, cy: 0.2, r: 460, base: BLUE, dr: (t: number) => 0.05 + 0.04 * Math.sin(t * 0.0004) },
-  { cx: 0.84, cy: 0.14, r: 420, base: VIOLET, dr: (t: number) => 0.04 + 0.035 * Math.cos(t * 0.00033) },
-  { cx: 0.92, cy: 0.74, r: 480, base: CYAN, dr: (t: number) => 0.045 + 0.04 * Math.sin(t * 0.00048 + 2) },
-  { cx: 0.08, cy: 0.84, r: 440, base: MAGENTA, dr: (t: number) => 0.04 + 0.035 * Math.cos(t * 0.00042 + 1) },
-  { cx: 0.5, cy: 0.5, r: 520, base: TEAL, dr: (t: number) => 0.03 + 0.03 * Math.sin(t * 0.00037 + 4) },
-];
+type AuroraRibbon = {
+  line: THREE.Line;
+  geometry: THREE.BufferGeometry;
+  positions: Float32Array;
+  speed: number;
+  amplitude: number;
+  yBase: number;
+  opacity: number;
+  color: THREE.Color;
+};
 
-const AURORA = [
-  { y: 0.2, amp: 0.09, freq: 0.0012, base: VIOLET },
-  { y: 0.74, amp: 0.11, freq: 0.0009, base: CYAN },
-  { y: 0.45, amp: 0.07, freq: 0.0015, base: BLUE },
-  { y: 0.6, amp: 0.06, freq: 0.0011, base: MAGENTA },
-];
-
-const SECTIONS = [
-  { id: "about", num: "01", label: "ABOUT" },
-  { id: "studio", num: "02", label: "YVB&CO STUDIO" },
-  { id: "work", num: "03", label: "SELECTED WORK" },
-  { id: "skills", num: "04", label: "TECHNICAL ARSENAL" },
-  { id: "contact", num: "05", label: "CONTACT" },
-];
-
-type Rect = { top: number; height: number };
+type Particle = {
+  position: THREE.Vector3;
+  velocity: THREE.Vector3;
+  size: number;
+  color: THREE.Color;
+  opacity: number;
+};
 
 export function EngineeringField() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
+  const ribbonsRef = useRef<AuroraRibbon[]>([]);
+  const particlesRef = useRef<Particle[]>([]);
+  const particleSystemRef = useRef<THREE.Points | null>(null);
+  const animationRef = useRef(0);
+  const timeRef = useRef(0);
+  const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
+  const reduceRef = useRef(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    reduceRef.current = prefersReduced;
 
-    let width = 0;
-    let height = 0;
-    let gridPat: CanvasPattern | null = null;
-    let rects: Rect[] = SECTIONS.map(() => ({ top: 0, height: 0 }));
-    let pointer = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
-    let trail = { x: -9999, y: -9999 };
-    let pinned: { x: number; y: number } | null = null;
-    let pinAlpha = 0;
-    let raf = 0;
-    let last = performance.now();
-    let time = 0;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
 
-    const particles = Array.from({ length: 46 }, () => ({
-      x: Math.random(),
-      y: Math.random(),
-      v: 0.01 + Math.random() * 0.03,
-      size: Math.random() < 0.4 ? 1 : Math.random() < 0.8 ? 2 : 3,
-      phase: Math.random() * Math.PI * 2,
-      pl: Math.floor(Math.random() * 5),
-    }));
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: !prefersReduced,
+      powerPreference: "high-performance",
+    });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+    container.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
 
-    const build = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, DPR_MAX);
-      width = w;
-      height = h;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const scene = new THREE.Scene();
+    sceneRef.current = scene;
 
-      const g = document.createElement("canvas");
-      g.width = g.height = GRID;
-      const gc = g.getContext("2d");
-      if (gc) {
-        gc.strokeStyle = alpha(INK, 0.065);
-        gc.lineWidth = 1;
-        gc.beginPath();
-        gc.moveTo(GRID - 0.5, 0);
-        gc.lineTo(GRID - 0.5, GRID);
-        gc.moveTo(0, GRID - 0.5);
-        gc.lineTo(GRID, GRID - 0.5);
-        gc.stroke();
-        gc.strokeStyle = alpha(INK, 0.05);
-        gc.fillStyle = alpha(INK, 0.05);
-        gc.beginPath();
-        gc.arc(GRID / 2, GRID / 2, 1, 0, Math.PI * 2);
-        gc.fill();
+    const aspect = width / height;
+    const frustumSize = 10;
+    const camera = new THREE.OrthographicCamera(
+      frustumSize * aspect / -2,
+      frustumSize * aspect / 2,
+      frustumSize / 2,
+      frustumSize / -2,
+      -100,
+      100
+    );
+    camera.position.z = 50;
+    cameraRef.current = camera;
+
+    const lineGroup = new THREE.Group();
+    const particleGroup = new THREE.Group();
+    scene.add(lineGroup, particleGroup);
+
+    const auroraColors = [
+      { color: 0x2563EB, opacity: 0.06, yBase: -2.5, amp: 0.25, speed: 0.04 },
+      { color: 0x7C3AED, opacity: 0.04, yBase: 0, amp: 0.2, speed: 0.05 },
+      { color: 0x0891B2, opacity: 0.04, yBase: 2.5, amp: 0.3, speed: 0.035 },
+      { color: 0x2563EB, opacity: 0.03, yBase: -1, amp: 0.15, speed: 0.06 },
+      { color: 0x7C3AED, opacity: 0.025, yBase: 1.5, amp: 0.18, speed: 0.045 },
+      { color: 0x0891B2, opacity: 0.025, yBase: 3.5, amp: 0.12, speed: 0.055 },
+    ];
+
+    ribbonsRef.current = auroraColors.map((config, _idx) => {
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(LINE_SEGMENTS * 3);
+      for (let i = 0; i < LINE_SEGMENTS; i++) {
+        const x = (i / (LINE_SEGMENTS - 1) - 0.5) * 30;
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = config.yBase;
+        positions[i * 3 + 2] = 0;
       }
-      gridPat = ctx.createPattern(g, "repeat");
-    };
+      geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
-    const measure = () => {
-      const sy = window.scrollY;
-      SECTIONS.forEach((s, i) => {
-        const el = document.getElementById(s.id);
-        if (!el) return;
-        rects[i] = {
-          top: el.getBoundingClientRect().top + sy,
-          height: el.offsetHeight,
-        };
+      const material = new THREE.LineBasicMaterial({
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.NormalBlending,
+        opacity: config.opacity,
+        color: config.color,
       });
-    };
 
-    const draw = (dt: number) => {
-      const scrollY = window.scrollY;
-      const vh = height;
-      time += dt;
-      ctx.clearRect(0, 0, width, height);
+      const line = new THREE.Line(geometry, material);
+      line.renderOrder = -2;
+      lineGroup.add(line);
 
-      const ox = (pointer.x - width / 2) * 0.006;
-      const oy = (pointer.y - height / 2) * 0.006;
+      return {
+        line,
+        geometry,
+        positions: new Float32Array(positions),
+        speed: config.speed,
+        amplitude: config.amp,
+        yBase: config.yBase,
+        opacity: config.opacity,
+        color: new THREE.Color(config.color),
+      };
+    });
 
-      // ── colorful ambient orbs (premium glow layer) ─────────
-      ctx.globalCompositeOperation = "lighter";
-      for (const orb of ORBS) {
-        const oxx = orb.cx * width + Math.sin(time * 0.00021 + orb.cx * 9) * 80;
-        const oyy = orb.cy * height + Math.cos(time * 0.00018 + orb.cy * 13) * 66;
-        const r = orb.r * (1 + orb.dr(time));
-        const grad = ctx.createRadialGradient(oxx, oyy, 0, oxx, oyy, r);
-        grad.addColorStop(0, alpha(orb.base, orb.cy > 0.6 ? 0.22 : 0.17));
-        grad.addColorStop(0.35, alpha(orb.base, orb.cy > 0.6 ? 0.1 : 0.08));
-        grad.addColorStop(1, alpha(orb.base, 0));
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(oxx, oyy, r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalCompositeOperation = "source-over";
+    const particleData: Particle[] = [];
+    const pPositions = new Float32Array(PARTICLE_COUNT * 3);
+    const pColors = new Float32Array(PARTICLE_COUNT * 3);
+    const pSizes = new Float32Array(PARTICLE_COUNT);
+    const pOpacities = new Float32Array(PARTICLE_COUNT);
 
-      // ── aurora ribbons drifting horizontally ───────────────
-      for (const au of AURORA) {
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        for (let x = -40; x <= width + 40; x += 24) {
-          const y =
-            au.y * vh +
-            Math.sin(x * 0.004 + time * au.freq) * au.amp * vh +
-            Math.sin(x * 0.009 + time * au.freq * 1.7) * au.amp * vh * 0.4;
-          if (x === -40) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = alpha(au.base, 0.06);
-        ctx.stroke();
-      }
+    const pColors2 = [
+      new THREE.Color(0x2563EB),
+      new THREE.Color(0x7C3AED),
+      new THREE.Color(0x0891B2),
+    ];
 
-      // ── drifting grid ──────────────────────────────────────
-      if (gridPat) {
-        const drift = (time * 2.5) % GRID;
-        ctx.save();
-        ctx.translate(ox, oy);
-        ctx.fillStyle = gridPat;
-        ctx.fillRect(
-          -GRID + drift,
-          -GRID + drift,
-          width + GRID * 2,
-          height + GRID * 2,
-        );
-        ctx.restore();
-      }
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const color = pColors2[i % 3].clone();
+      const opacity = 0.03 + Math.random() * 0.06;
+      const size = 0.01 + Math.random() * 0.03;
+      const p: Particle = {
+        position: new THREE.Vector3(
+          (Math.random() - 0.5) * 35,
+          (Math.random() - 0.5) * 20,
+          (Math.random() - 0.5) * 10
+        ),
+        velocity: new THREE.Vector3(
+          (Math.random() - 0.5) * 0.001,
+          (Math.random() - 0.5) * 0.001,
+          (Math.random() - 0.5) * 0.0005
+        ),
+        size,
+        color,
+        opacity,
+      };
+      particleData.push(p);
+      pPositions[i * 3] = p.position.x;
+      pPositions[i * 3 + 1] = p.position.y;
+      pPositions[i * 3 + 2] = p.position.z;
+      pColors[i * 3] = color.r;
+      pColors[i * 3 + 1] = color.g;
+      pColors[i * 3 + 2] = color.b;
+      pSizes[i] = size;
+      pOpacities[i] = opacity;
+    }
+    particlesRef.current = particleData;
 
-      // ── vertical photon scanlines drifting sideways ────────
-      ctx.lineWidth = 1;
-      for (let i = 0; i < 3; i++) {
-        const sx =
-          ((time * (0.007 + i * 0.003) + i * 0.37) % 1.2) * width - width * 0.1;
-        const pulse = 0.04 + 0.03 * Math.sin(time * 0.0016 + i);
-        const grad = ctx.createLinearGradient(sx, 0, sx + 90, 0);
-        grad.addColorStop(0, alpha(INK, 0));
-        grad.addColorStop(0.5, alpha(INK, pulse));
-        grad.addColorStop(1, alpha(INK, 0));
-        ctx.strokeStyle = grad;
-        ctx.beginPath();
-        ctx.moveTo(sx, -40);
-        ctx.lineTo(sx, vh + 40);
-        ctx.stroke();
-      }
+    const pGeometry = new THREE.BufferGeometry();
+    pGeometry.setAttribute("position", new THREE.BufferAttribute(pPositions, 3));
+    pGeometry.setAttribute("color", new THREE.BufferAttribute(pColors, 3));
 
-      // ── bobbing measurement rows ───────────────────────────
-      const rows = [
-        { f: 0.18, label: "Y · 0180" },
-        { f: 0.42, label: "Y · 0420" },
-        { f: 0.66, label: "Y · 0640" },
-      ];
-      ctx.lineWidth = 1;
-      for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-        const bob = Math.sin(time * 0.0005 + i * 2.1) * 14;
-        const y = row.f * vh + bob + (pointer.y - vh / 2) * 0.008;
+    const pMaterial = new THREE.PointsMaterial({
+      size: 0.8,
+      vertexColors: true,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.NormalBlending,
+      opacity: 0.4,
+      sizeAttenuation: true,
+    });
 
-        ctx.strokeStyle = alpha(INK, 0.06);
-        ctx.beginPath();
-        ctx.moveTo(-40, y);
-        ctx.lineTo(width + 40, y);
-        ctx.stroke();
+    const particleSystem = new THREE.Points(pGeometry, pMaterial);
+    particleSystem.renderOrder = 0;
+    particleGroup.add(particleSystem);
+    particleSystemRef.current = particleSystem;
 
-        ctx.strokeStyle = alpha(INK, 0.1);
-        const tickOffset = Math.floor(time * 0.02) % 120;
-        for (let x = 40 - tickOffset; x < width + 120; x += 120) {
-          ctx.beginPath();
-          ctx.moveTo(x, y - 4);
-          ctx.lineTo(x, y + 4);
-          ctx.stroke();
-        }
-
-        ctx.fillStyle = alpha(INK, 0.18);
-        ctx.font = '500 10px "JetBrains Mono", monospace';
-        ctx.textAlign = "left";
-        ctx.textBaseline = "alphabetic";
-        ctx.fillText(row.label, 24, y - 12);
-      }
-
-      // ── rotating datum circle (compass head) ───────────────
-      const cx = width - 96 - ox;
-      const cy = 108 + oy;
-      const cr = 74;
-      ctx.save();
-      ctx.translate(cx, cy);
-
-      ctx.strokeStyle = alpha(INK, 0.12);
-      ctx.beginPath();
-      ctx.arc(0, 0, cr, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.rotate(time * 0.00018);
-      ctx.strokeStyle = alpha(INK, 0.14);
-      ctx.setLineDash([4, 8]);
-      ctx.beginPath();
-      ctx.arc(0, 0, cr - 10, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      for (let i = 0; i < 12; i++) {
-        const a = (i / 12) * Math.PI * 2;
-        const r1 = cr + 5;
-        const r2 = i % 3 === 0 ? cr + 14 : cr + 9;
-        ctx.strokeStyle = i % 3 === 0 ? alpha(BLUE, 0.5) : alpha(INK, 0.16);
-        ctx.beginPath();
-        ctx.moveTo(Math.cos(a) * r1, Math.sin(a) * r1);
-        ctx.lineTo(Math.cos(a) * r2, Math.sin(a) * r2);
-        ctx.stroke();
-      }
-
-      ctx.strokeStyle = alpha(BLUE, 0.45);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(
-        Math.cos(time * 0.0003) * (cr - 14),
-        Math.sin(time * 0.0003) * (cr - 14),
-      );
-      ctx.stroke();
-
-      ctx.strokeStyle = alpha(MAGENTA, 0.5);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(
-        -Math.cos(time * 0.0003 + 2) * (cr - 30),
-        -Math.sin(time * 0.0003 + 2) * (cr - 30),
-      );
-      ctx.stroke();
-
-      ctx.strokeStyle = alpha(INK, 0.2);
-      ctx.beginPath();
-      ctx.moveTo(-cr - 8, 0);
-      ctx.lineTo(-cr + 8, 0);
-      ctx.moveTo(cr - 8, 0);
-      ctx.lineTo(cr + 8, 0);
-      ctx.stroke();
-
-      const glowGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, 10);
-      glowGrad.addColorStop(0, alpha(CYAN, 0.9));
-      glowGrad.addColorStop(1, alpha(CYAN, 0));
-      ctx.fillStyle = glowGrad;
-      ctx.beginPath();
-      ctx.arc(0, 0, 10, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-
-      // ── radial pulse rings from bottom-left anchor ─────────
-      const anchor = ((time * 0.04) % 900) * 1.15;
-      const ringR = 60 + anchor;
-      for (let ring = 0; ring < 2; ring++) {
-        const r = ringR - ring * 120;
-        if (r < 24) continue;
-        const a = Math.max(0.05 - r * 0.0002, 0);
-        ctx.strokeStyle = alpha(BLUE, 0.5 * a * 0.35);
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(52, vh - 96, r, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      ctx.strokeStyle = alpha(BLUE, 0.5);
-      ctx.beginPath();
-      ctx.arc(52, vh - 96, 3, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // ── drifting colorful particles ────────────────────────
-      const PALETTE = [BLUE, CYAN, VIOLET, MAGENTA, TEAL];
-      for (const p of particles) {
-        const yy = (p.y + time * p.v * 0.001) % 1;
-        const xx = p.x + Math.sin(time * 0.0004 + p.phase) * 0.004;
-        const tw = 0.16 + 0.12 * Math.sin(time * 0.001 + p.phase * 3);
-        ctx.globalAlpha = tw;
-        ctx.fillStyle = alpha(PALETTE[p.pl], 1);
-        ctx.fillRect(xx * width, yy * vh, p.size, p.size);
-      }
-      ctx.globalAlpha = 1;
-
-      // ── section watermarks 01–04 ───────────────────────────
-      for (let i = 0; i < SECTIONS.length; i++) {
-        const r = rects[i];
-        if (r.height <= 0) continue;
-        const topV = r.top - scrollY;
-        const bottomV = topV + r.height;
-        if (bottomV < -vh * 0.4 || topV > vh * 1.3) continue;
-
-        const overlap =
-          Math.max(0, Math.min(bottomV, vh) - Math.max(topV, 0)) /
-          Math.min(r.height, vh);
-        if (overlap <= 0.02) continue;
-        const centered =
-          scrollY + vh * 0.5 >= topV && scrollY + vh * 0.5 <= bottomV;
-
-        const float = Math.sin(time * 0.0006 + i * 1.7) * 10;
-        const wmY = topV + Math.max(vh * 0.05, 12) + oy + float;
-        const wmX = width - 24 - ox;
-
-        ctx.textAlign = "right";
-        ctx.textBaseline = "alphabetic";
-        const wmBase = [BLUE, VIOLET, CYAN, MAGENTA, TEAL][i % 5];
-        ctx.font = "800 9rem Poppins, sans-serif";
-        ctx.fillStyle = alpha(
-          wmBase,
-          0.04 + overlap * (centered ? 0.12 : 0.06),
-        );
-        ctx.fillText(SECTIONS[i].num, wmX, wmY + 130);
-
-        ctx.font = '600 10px "JetBrains Mono", monospace';
-        ctx.fillStyle = alpha(wmBase, 0.1 + overlap * 0.3);
-        ctx.fillText(`${SECTIONS[i].num} — ${SECTIONS[i].label}`, wmX, wmY + 158);
-      }
-
-      // ── cursor plotter line + reticle ──────────────────────
-      if (pointer.x > -1000 && trail.x > -1000) {
-        ctx.strokeStyle = alpha(BLUE, 0.14);
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(trail.x, trail.y);
-        ctx.lineTo(pointer.x, pointer.y);
-        ctx.stroke();
-
-        ctx.strokeStyle = alpha(BLUE, 0.5);
-        ctx.beginPath();
-        ctx.moveTo(pointer.x - 8, pointer.y);
-        ctx.lineTo(pointer.x + 8, pointer.y);
-        ctx.moveTo(pointer.x, pointer.y - 8);
-        ctx.lineTo(pointer.x, pointer.y + 8);
-        ctx.stroke();
-
-        ctx.strokeStyle = alpha(INK, 0.12);
-        ctx.beginPath();
-        ctx.arc(pointer.x, pointer.y, 3, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      // ── pinned-project highlight ───────────────────────────
-      pinAlpha += ((pinned ? 1 : 0) - pinAlpha) * 0.1;
-      if (pinAlpha > 0.02) {
-        ctx.strokeStyle = alpha(BLUE, pinAlpha * 0.5);
-        ctx.fillStyle = alpha(BLUE, pinAlpha * 0.7);
-        ctx.font = '600 10px "JetBrains Mono", monospace';
-        ctx.textAlign = "left";
-        ctx.textBaseline = "alphabetic";
-        if (pinned) {
-          ctx.beginPath();
-          ctx.moveTo(pinned.x, pinned.y - 70);
-          ctx.lineTo(pinned.x, pinned.y + 110);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.moveTo(pinned.x - 8, pinned.y);
-          ctx.lineTo(pinned.x + 8, pinned.y);
-          ctx.moveTo(pinned.x, pinned.y - 8);
-          ctx.lineTo(pinned.x, pinned.y + 8);
-          ctx.stroke();
-          ctx.fillText("· PINNED", pinned.x + 12, pinned.y - 70);
-        }
-      }
-    };
-
-    const loop = (now: number) => {
-      raf = requestAnimationFrame(loop);
-      const dt = Math.min((now - last) / 1000, 0.05);
-      last = now;
-      const prev = { x: pointer.x, y: pointer.y };
-      pointer.x += (pointer.tx - pointer.x) * 0.1;
-      pointer.y += (pointer.ty - pointer.y) * 0.1;
-      if (trail.x < -1000) trail = { x: pointer.x, y: pointer.y };
-      trail.x += (prev.x - trail.x) * 0.08;
-      trail.y += (prev.y - trail.y) * 0.08;
-      if (!document.hidden) draw(dt);
-    };
-
-    const onMove = (e: MouseEvent) => {
-      pointer.tx = e.clientX;
-      pointer.ty = e.clientY;
-    };
-    const onLeave = () => {
-      pointer.tx = -9999;
-      pointer.ty = -9999;
-    };
-    const onScroll = () => {
-      measure();
-      if (reduce) draw(0.016);
-    };
-    const onPin = (e: Event) => {
-      const detail = (e as CustomEvent<{ x: number; y: number } | null>).detail;
-      pinned = detail;
-      if (reduce) draw(0.016);
-    };
     const onResize = () => {
-      build();
-      measure();
-      if (reduce) draw(0.016);
-      else last = performance.now();
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      const aspect = w / h;
+      const frustumSize = 10;
+      if (cameraRef.current) {
+        cameraRef.current.left = frustumSize * aspect / -2;
+        cameraRef.current.right = frustumSize * aspect / 2;
+        cameraRef.current.top = frustumSize / 2;
+        cameraRef.current.bottom = frustumSize / -2;
+        cameraRef.current.updateProjectionMatrix();
+      }
+      if (rendererRef.current) {
+        rendererRef.current.setSize(w, h);
+        rendererRef.current.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      }
     };
 
-    build();
-    measure();
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      mouseRef.current.targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      mouseRef.current.targetY =
+        (-(e.clientY - rect.top) / rect.height + 0.5) * 2;
+    };
 
     window.addEventListener("resize", onResize, { passive: true });
-    window.addEventListener("mousemove", onMove, { passive: true });
-    window.addEventListener("mouseout", onLeave, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("portfolio:pin", onPin);
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
 
-    if (reduce) {
-      draw(0);
+    const animate = (timestamp: number) => {
+      animationRef.current = requestAnimationFrame(animate);
+      if (document.hidden) return;
+
+      if (reduceRef.current) {
+        if (rendererRef.current && sceneRef.current && cameraRef.current) {
+          rendererRef.current.render(sceneRef.current, cameraRef.current);
+        }
+        return;
+      }
+
+      const delta = Math.min((timestamp - timeRef.current) / 1000, 0.05);
+      timeRef.current = timestamp;
+      const t = timestamp * 0.001;
+
+      const mouse = mouseRef.current;
+      mouse.x += (mouse.targetX - mouse.x) * 0.015;
+      mouse.y += (mouse.targetY - mouse.y) * 0.015;
+
+      ribbonsRef.current.forEach((ribbon, i) => {
+        const positions = ribbon.geometry.attributes.position
+          .array as Float32Array;
+        for (let j = 0; j < LINE_SEGMENTS; j++) {
+          const x = positions[j * 3];
+          const progress = j / (LINE_SEGMENTS - 1);
+          const wave1 =
+            Math.sin(x * 0.5 + t * ribbon.speed * 3 + i) * ribbon.amplitude;
+          const wave2 =
+            Math.sin(x * 0.8 + t * ribbon.speed * 4 + i * 1.5) *
+            ribbon.amplitude * 0.6;
+          const y =
+            ribbon.yBase + wave1 + wave2 + mouse.y * 0.3 * (1 - progress);
+          positions[j * 3 + 1] = y;
+          positions[j * 3 + 2] = Math.sin(t * 0.2 + x * 0.05 + i) * 0.3;
+        }
+        ribbon.geometry.attributes.position.needsUpdate = true;
+
+        (ribbon.line.material as THREE.LineBasicMaterial).opacity =
+          ribbon.opacity * (0.8 + Math.sin(t * 0.15 + i) * 0.2);
+      });
+
+      if (particleSystemRef.current) {
+        const sys = particleSystemRef.current;
+        const positions = sys.geometry.attributes.position
+          .array as Float32Array;
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          const p = particleData[i];
+          p.position.addScaledVector(p.velocity, delta * 60);
+          p.position.x += Math.sin(t * 0.3 + i * 0.2) * 0.0008;
+          p.position.y += Math.cos(t * 0.25 + i * 0.15) * 0.0005;
+
+          if (p.position.y < -15) p.position.y = 15;
+          if (p.position.y > 15) p.position.y = -15;
+          if (p.position.x < -22) p.position.x = 22;
+          if (p.position.x > 22) p.position.x = -22;
+
+          positions[i * 3] = p.position.x;
+          positions[i * 3 + 1] = p.position.y;
+          positions[i * 3 + 2] = p.position.z;
+        }
+        sys.geometry.attributes.position.needsUpdate = true;
+        sys.rotation.z = Math.sin(t * 0.03) * 0.01;
+      }
+
+      if (rendererRef.current && sceneRef.current && cameraRef.current) {
+        rendererRef.current.render(sceneRef.current, cameraRef.current);
+      }
+    };
+
+    if (reduceRef.current) {
+      const staticRender = () => {
+        if (
+          rendererRef.current &&
+          sceneRef.current &&
+          cameraRef.current &&
+          reduceRef.current
+        ) {
+          rendererRef.current.render(sceneRef.current, cameraRef.current);
+        }
+        if (reduceRef.current) {
+          requestAnimationFrame(staticRender);
+        }
+      };
+      staticRender();
     } else {
-      last = performance.now();
-      raf = requestAnimationFrame(loop);
+      animate(performance.now());
     }
 
-    requestAnimationFrame(measure);
-
     return () => {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(animationRef.current);
       window.removeEventListener("resize", onResize);
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseout", onLeave);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("portfolio:pin", onPin);
+      window.removeEventListener("mousemove", onMouseMove);
+
+      if (rendererRef.current) {
+        rendererRef.current.dispose();
+        container.removeChild(rendererRef.current.domElement);
+      }
+      ribbonsRef.current.forEach((r) => {
+        r.geometry.dispose();
+        (r.line.material as THREE.Material).dispose();
+      });
+      if (particleSystemRef.current) {
+        particleSystemRef.current.geometry.dispose();
+        (particleSystemRef.current.material as THREE.Material).dispose();
+      }
     };
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="engineering-field"
-      aria-hidden="true"
-    />
+    <div ref={containerRef} className="engineering-field" aria-hidden="true" />
   );
 }
+
+export default EngineeringField;

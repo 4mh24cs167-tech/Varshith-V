@@ -87,9 +87,9 @@ export function TraceCursor() {
         const a = pts[i - 1];
         const b = pts[i];
         const t = i / (pts.length - 1);
-        const alpha = t * 0.4;
-        ctx.strokeStyle = `rgb(36 107 254 / ${alpha.toFixed(3)})`;
-        ctx.lineWidth = 0.5 + t * 1.4;
+        const alpha = t * 0.28;
+        ctx.strokeStyle = `rgb(37 99 235 / ${alpha.toFixed(3)})`;
+        ctx.lineWidth = 0.5 + t * 1.2;
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
@@ -102,9 +102,9 @@ export function TraceCursor() {
         ctx.stroke();
       }
 
-      ctx.fillStyle = "rgb(36 107 254 / 0.8)";
+      ctx.fillStyle = "rgb(37 99 235 / 0.7)";
       ctx.beginPath();
-      ctx.arc(last.x, last.y, 1.6, 0, Math.PI * 2);
+      ctx.arc(last.x, last.y, 1.4, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     };

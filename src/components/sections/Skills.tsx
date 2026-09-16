@@ -128,22 +128,18 @@ export function Skills() {
         viewport={{ once: true, margin: "-8% 0px" }}
         variants={stagger}
       >
-        {SKILL_GROUPS.map((group, i) => (
-          <motion.div
-            key={group.id}
-            variants={fadeUp}
-            className="skill-group"
-            style={{ "--skill-hue-offset": String(-i * 18) } as React.CSSProperties}
-          >
-            <div className="skill-group-head">
-              <span className="skill-group-num tnum" aria-hidden="true">
+        {SKILL_GROUPS.map((group) => (
+          <motion.div key={group.id} variants={fadeUp} className="skill-chipgroup">
+            <div className="skill-chipgroup-head">
+              <span className="skill-chipgroup-num tnum" aria-hidden="true">
                 {group.num}
               </span>
-              <h3 className="skill-group-title">{group.title}</h3>
+              <h3 className="skill-chipgroup-title">{group.title}</h3>
+              <span className="skill-chipgroup-line" aria-hidden="true" />
             </div>
-            <ul className="skill-list">
+            <ul className="skill-chips">
               {group.skills.map((skill) => (
-                <li key={skill} className="skill-pill">
+                <li key={skill} className="skill-chip">
                   {skill}
                 </li>
               ))}

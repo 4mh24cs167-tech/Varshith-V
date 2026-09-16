@@ -8,8 +8,7 @@ export const NAV_ITEMS = [
   { id: "studio", label: "YVB&Co", num: "02" },
   { id: "work", label: "Selected Works", num: "03" },
   { id: "skills", label: "Skills", num: "04" },
-  { id: "faq", label: "FAQ", num: "05" },
-  { id: "contact", label: "Contact", num: "06" },
+  { id: "contact", label: "Contact", num: "05" },
 ] as const;
 
 export const NAV_IDS = NAV_ITEMS.map((item) => item.id);

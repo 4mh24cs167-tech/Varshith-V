@@ -13,7 +13,6 @@ import { Work } from "./components/sections/Work";
 import { Skills } from "./components/sections/Skills";
 import { TechMarquee } from "./components/sections/TechMarquee";
 import { Stats } from "./components/sections/Stats";
-import { FAQ } from "./components/sections/FAQ";
 import { Contact } from "./components/sections/Contact";
 import { useActiveSection } from "./hooks/useActiveSection";
 
@@ -23,7 +22,6 @@ const SECTION_IDS = [
   "studio",
   "work",
   "skills",
-  "faq",
   "contact",
 ] as const;
 
@@ -71,7 +69,6 @@ function App() {
         <Skills />
         <TechMarquee />
         <Stats />
-        <FAQ />
         <Contact />
       </main>
 

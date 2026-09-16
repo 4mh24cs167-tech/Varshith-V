@@ -30,8 +30,7 @@ const SECTIONS = [
   { id: "studio", num: "02", label: "YVB&CO STUDIO" },
   { id: "work", num: "03", label: "SELECTED WORK" },
   { id: "skills", num: "04", label: "TECHNICAL ARSENAL" },
-  { id: "faq", num: "05", label: "EXPERTISE" },
-  { id: "contact", num: "06", label: "CONTACT" },
+  { id: "contact", num: "05", label: "CONTACT" },
 ];
 
 type Rect = { top: number; height: number };

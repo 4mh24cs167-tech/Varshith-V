@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-const LINE_COUNT = 6;
 const PARTICLE_COUNT = 30;
 const LINE_SEGMENTS = 120;
 

@@ -16,35 +16,10 @@ export function Hero() {
         <div className="hero-hline hero-hline--1" />
       </div>
 
-      {/* Navbar */}
-      <header className="hero-nav">
-        <div className="container hero-nav-inner">
-          <a href="#hero" className="hero-nav-logo">
-            <span className="navbar-logo-mark">YVB</span>
-            <span className="navbar-logo-amp">&amp;</span>
-            <span className="navbar-logo-co">CO</span>
-          </a>
-
-          <nav className="hero-nav-links" aria-label="Main">
-            <a href="#about" className="hero-nav-link">ABOUT</a>
-            <a href="#work" className="hero-nav-link">WORK</a>
-            <a href="#skills" className="hero-nav-link">EXPERTISE</a>
-            <a href="#contact" className="hero-nav-link">CONTACT</a>
-            <button className="hero-nav-burger" aria-label="Menu">
-              <span /><span />
-            </button>
-          </nav>
-        </div>
-      </header>
+      {/* Navbar is rendered by App.tsx */}
 
       <div className="container hero-content">
         <div className="hero-left">
-          {/* Section indicator */}
-          <div className="hero-section-indicator">
-            <span className="hero-section-label">01</span>
-            <span className="hero-section-line" />
-          </div>
-
           {/* Label */}
           <motion.p
             variants={fadeUp}

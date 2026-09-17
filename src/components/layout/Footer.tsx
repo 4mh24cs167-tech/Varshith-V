@@ -6,9 +6,7 @@ export function Footer() {
       <div className="container footer-inner">
         <div className="footer-left">
           <a href="#hero" className="footer-logo">
-            <span className="navbar-logo-mark">YVB</span>
-            <span className="navbar-logo-amp">&amp;</span>
-            <span className="navbar-logo-co">CO</span>
+            <span className="navbar-logo-name">VARSHITH V</span>
           </a>
         </div>
 

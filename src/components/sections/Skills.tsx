@@ -90,17 +90,6 @@ export function Skills() {
         <div className="skills-grid">
           {/* Left column */}
           <div className="skills-left">
-            <motion.div
-              variants={fadeUp}
-              initial={reduce ? false : "hidden"}
-              whileInView={reduce ? undefined : "show"}
-              viewport={{ once: true }}
-              className="skills-header"
-            >
-              <span className="section-num">03</span>
-              <span className="section-label">EXPERTISE</span>
-            </motion.div>
-
             <motion.h2
               variants={fadeUp}
               initial={reduce ? false : "hidden"}

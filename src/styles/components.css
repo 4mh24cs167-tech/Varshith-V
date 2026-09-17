@@ -547,7 +547,6 @@
 .about-section { background: var(--color-background); }
 .about-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-16); align-items: start; }
 @media (min-width: 46rem) { .about-grid { grid-template-columns: 1.1fr 0.9fr; gap: var(--space-20); } }
-.about-header { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-6); }
 .about-title { font-family: var(--font-display); font-size: var(--type-h2); font-weight: 700; line-height: var(--leading-h2); letter-spacing: var(--tracking-h2); color: var(--color-text); margin-bottom: var(--space-6); }
 .about-desc { font-size: var(--type-body-lg); line-height: var(--leading-body-lg); color: var(--color-text-secondary); max-width: 52ch; margin-bottom: var(--space-6); }
 .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-10); }
@@ -566,15 +565,15 @@
 .about-card-rule { width: 60px; height: 1px; background: var(--color-border-strong); margin-top: var(--space-6); }
 .about-card-num { display: block; font-family: var(--font-mono); font-size: var(--type-micro); color: var(--color-text-muted); margin-top: var(--space-3); letter-spacing: 0.08em; }
 .about-card--cgpa { display: flex; align-items: center; gap: var(--space-6); }
-.about-cgpa-chart { display: flex; align-items: flex-end; gap: 3px; height: 60px; flex: 1; }
+.about-cgpa-chart { display: flex; align-items: flex-end; gap: 3px; height: 60px; width: 100%; }
 .about-cgpa-bar { flex: 1; background: var(--color-accent); border-radius: 2px; opacity: 0.6; min-height: 4px; animation: cgpa-grow 1s var(--ease-out) backwards; }
 .about-cgpa-value { font-family: var(--font-display); font-size: var(--type-h2); font-weight: 800; color: var(--color-text); display: block; }
 .about-cgpa-label { font-family: var(--font-mono); font-size: var(--type-micro); color: var(--color-text-muted); letter-spacing: 0.1em; }
 
 .work-section { background: var(--color-background-raised); position: relative; }
 .work-section::before { content: ""; position: absolute; inset: 0; background: var(--gradient-surface-radial); pointer-events: none; }
-.work-header { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-10); position: relative; z-index: 1; }
-.work-header-left { display: flex; align-items: center; gap: var(--space-4); }
+.work-header { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-10); position: relative; z-index: 1; }
+.work-title { font-family: var(--font-display); font-size: var(--type-h2); font-weight: 700; line-height: var(--leading-h2); letter-spacing: var(--tracking-h2); color: var(--color-text); margin-right: var(--space-4); }
 .work-subtitle { font-family: var(--font-mono); font-size: var(--type-micro); color: var(--color-text-muted); letter-spacing: 0.04em; margin-left: auto; }
 .work-nav-btns { display: flex; gap: var(--space-2); }
 .work-nav-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-full); border: 1px solid var(--color-border); color: var(--color-text-muted); transition: all var(--duration-fast) var(--ease-out); }
@@ -586,10 +585,10 @@
 .work-card { flex: 0 0 auto; width: min(420px, 85vw); scroll-snap-align: start; }
 .work-card-inner { background: var(--color-background-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; transition: all var(--duration-slow) var(--ease-out); }
 .work-card-inner:hover { border-color: var(--color-border-strong); transform: translateY(-4px); box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5); }
-.work-card-header { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-5) 0; }
+.work-card-header { display: flex; align-items: center; justify-content: space-between; padding: var(--space-4) var(--space-5) 0; gap: var(--space-3); }
 .work-card-num { font-family: var(--font-mono); font-size: var(--type-small); color: var(--color-text-muted); }
 .work-card-badge { font-family: var(--font-mono); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em; padding: 2px 8px; border-radius: var(--radius-full); background: var(--color-accent-subtle); color: var(--color-accent); }
-.work-card-visual { padding: var(--space-4) var(--space-5); }
+
 .project-screenshot { width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--color-border); }
 .work-card-info { padding: var(--space-4) var(--space-5) var(--space-5); }
 .work-card-title { font-family: var(--font-display); font-size: var(--type-h3); font-weight: 700; color: var(--color-text); margin-bottom: var(--space-1); }
@@ -603,7 +602,6 @@
 .skills-section { background: var(--color-background); position: relative; }
 .skills-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-16); align-items: start; }
 @media (min-width: 46rem) { .skills-grid { grid-template-columns: 1.1fr 0.9fr; gap: var(--space-20); } }
-.skills-header { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-6); }
 .skills-title { font-family: var(--font-display); font-size: var(--type-h2); font-weight: 700; line-height: var(--leading-h2); letter-spacing: var(--tracking-h2); color: var(--color-text); margin-bottom: var(--space-6); }
 .skills-desc { font-size: var(--type-body-lg); line-height: var(--leading-body-lg); color: var(--color-text-secondary); max-width: 52ch; margin-bottom: var(--space-10); }
 .skills-categories { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-top: var(--space-8); }

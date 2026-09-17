@@ -30,9 +30,7 @@ export function Navbar({ menuOpen, onMenuToggle, menuTriggerRef, activeSection }
     <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
       <div className="navbar-inner container">
         <a href="#hero" className="navbar-logo">
-          <span className="navbar-logo-mark">YVB</span>
-          <span className="navbar-logo-amp">&amp;</span>
-          <span className="navbar-logo-co">CO</span>
+          <span className="navbar-logo-name">VARSHITH V</span>
         </a>
 
         <nav className="navbar-nav" aria-label="Main">

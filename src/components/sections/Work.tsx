@@ -25,17 +25,6 @@ const SCREENSHOTS: Record<string, React.FC> = {
   enils: EnilsScreenshot,
 };
 
-const PROJECT_LABELS: Record<string, string> = {
-  uniconv: "01",
-  "mrf-rd": "02",
-  "noc-portal": "05",
-  eventflow: "04",
-  reliefchain: "03",
-  "mit-place-pro": "06",
-  petcommunity: "07",
-  enils: "08",
-};
-
 export function Work() {
   const reduce = useReducedMotion();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -66,7 +55,6 @@ export function Work() {
   return (
     <Section id="work" className="work-section">
       <div className="container">
-        {/* Section header */}
         <motion.div
           variants={fadeUp}
           initial={reduce ? false : "hidden"}
@@ -74,10 +62,7 @@ export function Work() {
           viewport={{ once: true }}
           className="work-header"
         >
-          <div className="work-header-left">
-            <span className="section-num">02</span>
-            <span className="section-label">SELECTED WORK</span>
-          </div>
+          <h2 className="work-title">Selected Work</h2>
           <span className="work-subtitle">
             Real world solutions. Built with modern technologies.
           </span>
@@ -115,9 +100,8 @@ export function Work() {
         viewport={{ once: true }}
       >
         <div ref={scrollRef} className="work-scroll">
-          {PROJECTS.map((project, index) => {
+          {PROJECTS.map((project) => {
             const Screenshot = SCREENSHOTS[project.id];
-            const num = PROJECT_LABELS[project.id] || String(index + 1).padStart(2, "0");
 
             return (
               <motion.div
@@ -126,14 +110,6 @@ export function Work() {
                 className="work-card"
               >
                 <div className="work-card-inner">
-                  {/* Card number */}
-                  <div className="work-card-header">
-                    <span className="work-card-num tnum">{num}</span>
-                    {project.featured && (
-                      <span className="work-card-badge">FEATURED</span>
-                    )}
-                  </div>
-
                   {/* Screenshot */}
                   <div className="work-card-visual">
                     {Screenshot && <Screenshot />}
@@ -141,7 +117,12 @@ export function Work() {
 
                   {/* Card info */}
                   <div className="work-card-info">
-                    <h3 className="work-card-title">{project.title}</h3>
+                    <div className="work-card-header">
+                      <h3 className="work-card-title">{project.shortTitle || project.title}</h3>
+                      {project.featured && (
+                        <span className="work-card-badge">FEATURED</span>
+                      )}
+                    </div>
                     <p className="work-card-category">{project.category}</p>
 
                     <a

@@ -18,7 +18,6 @@ export function YvbCo() {
         >
           <div className="studio-card-header">
             <div>
-              <span className="section-num">02</span>
               <span className="section-label">THE STUDIO</span>
             </div>
             <h3 className="studio-title">

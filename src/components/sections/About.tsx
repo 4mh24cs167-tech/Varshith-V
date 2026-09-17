@@ -33,29 +33,7 @@ export function About() {
     <Section id="about" className="about-section">
       <div className="container">
         <div className="about-grid">
-          {/* Left column */}
           <div className="about-left">
-            <div className="about-header">
-              <motion.span
-                variants={fadeUp}
-                initial={reduce ? false : "hidden"}
-                whileInView={reduce ? undefined : "show"}
-                viewport={{ once: true }}
-                className="section-num"
-              >
-                01
-              </motion.span>
-              <motion.span
-                variants={fadeUp}
-                initial={reduce ? false : "hidden"}
-                whileInView={reduce ? undefined : "show"}
-                viewport={{ once: true }}
-                className="section-label"
-              >
-                ABOUT
-              </motion.span>
-            </div>
-
             <motion.h2
               variants={fadeUp}
               initial={reduce ? false : "hidden"}
@@ -77,8 +55,6 @@ export function About() {
               I'm a Computer Science Engineering student with an {CGPA} CGPA,
               focused on building practical software, solving complex technical
               problems, and continuously expanding my engineering capabilities.
-              From file converters to placement portals to event platforms, I
-              design and build software that works.
             </motion.p>
 
             <motion.a
@@ -95,7 +71,6 @@ export function About() {
               </svg>
             </motion.a>
 
-            {/* Feature grid */}
             <motion.div
               variants={staggerFade}
               initial={reduce ? false : "hidden"}
@@ -112,9 +87,7 @@ export function About() {
                     </svg>
                   </div>
                   <div>
-                    <div className="about-feature-title">
-                      <span className="tnum">{f.num}</span> {f.title}
-                    </div>
+                    <div className="about-feature-title">{f.title}</div>
                     <p className="about-feature-desc">{f.desc}</p>
                   </div>
                 </motion.div>
@@ -122,7 +95,6 @@ export function About() {
             </motion.div>
           </div>
 
-          {/* Right column */}
           <div className="about-right">
             <motion.div
               variants={fadeUp}
@@ -134,7 +106,7 @@ export function About() {
               <h3 className="about-card-title">Build</h3>
               <h3 className="about-card-title">Solve</h3>
               <h3 className="about-card-title about-card-title--accent">Improve</h3>
-              <p className="about-card-rule" />
+              <div className="about-card-rule" />
               <span className="about-card-num">// 01</span>
             </motion.div>
 

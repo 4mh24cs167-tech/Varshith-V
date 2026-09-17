@@ -18,9 +18,6 @@ export function Contact() {
             viewport={{ once: true }}
             className="contact-left"
           >
-            <div className="contact-header">
-              <span className="contact-section-num tnum">05</span>
-            </div>
             <h2 className="contact-title">Let's Build<br />Something</h2>
             <p className="contact-desc">
               Have a project, opportunity, or just want to connect? I'm open to

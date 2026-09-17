@@ -218,22 +218,10 @@ ul, ol {
 }
 
 /* ── Navbar logo ───────────────────────────────────────────── */
-.navbar-logo-mark {
+.navbar-logo-name {
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: var(--type-small);
   color: var(--color-text);
-  letter-spacing: 0.04em;
-}
-.navbar-logo-amp {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: var(--type-small);
-  color: var(--color-text-muted);
-}
-.navbar-logo-co {
-  font-family: var(--font-mono);
-  font-weight: 400;
-  font-size: var(--type-small);
-  color: var(--color-text-muted);
+  letter-spacing: 0.06em;
 }

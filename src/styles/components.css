@@ -79,7 +79,7 @@
 }
 
 .navbar-actions {
-  display: none;
+  display: flex !important;
   align-items: center;
   gap: var(--space-6);
 }

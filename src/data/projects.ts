@@ -379,9 +379,63 @@ export const PROJECTS: readonly Project[] = [
     featured: false,
   },
   {
+    id: "acadops",
+    slug: "acadops",
+    number: "07",
+    title: "AcadOps",
+    shortTitle: "AcadOps",
+    category: "Full ERP System for Academic Institutions",
+    tags: ["software", "web"],
+    year: null,
+    status: "live",
+    description:
+      "A comprehensive ERP platform for academic operations with role-based access control, immutable audit logs, and complete semester lifecycle management.",
+    longDescription:
+      "AcadOps is a full-featured Enterprise Resource Planning system built for academic institutions. It streamlines the entire academic lifecycle — from admissions and enrollment through class scheduling, attendance tracking, examination management, grade processing, and fee management. The platform enforces strict role-based access control (Admin, Principal, Student, etc.), maintains immutable audit logs for compliance, and provides dashboards for every stakeholder. Built with a governance-first architecture ensuring data integrity and transparency across all operations.",
+    problem:
+      "Academic institutions manage complex operations across admissions, scheduling, attendance, exams, and fees through disconnected systems and spreadsheets. Lack of a unified platform leads to data inconsistencies, compliance gaps, and operational inefficiencies.",
+    approach:
+      "Designed a governance-first ERP with role-based access at its core. Built modular workflows for each academic operation with immutable audit trails. Created distinct dashboards for Admins, Principals, HODs, Teachers, and Students, ensuring each role sees only what's relevant while maintaining end-to-end traceability.",
+    technologies: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Node.js",
+      "PostgreSQL",
+      "JWT",
+      "Role-Based Access Control",
+    ],
+    highlights: [
+      "Complete academic lifecycle: admissions, enrollment, scheduling, exams, grades, fees",
+      "Role-based dashboards for Admin, Principal, HOD, Teacher, Student",
+      "Immutable audit logs for all operations and data changes",
+      "Attendance tracking and examination management",
+      "Fee management with payment tracking and receipts",
+      "Semester-wise lifecycle management with promotion workflows",
+    ],
+    architecture: [
+      {
+        node: "CLIENT",
+        detail: "Next.js frontend with role-based routing on Vercel",
+      },
+      {
+        node: "API",
+        detail: "Node.js backend with JWT auth and RBAC middleware",
+      },
+      {
+        node: "DATA",
+        detail: "PostgreSQL with structured academic schemas and audit tables",
+      },
+    ],
+    liveUrl: "https://erp-client-9lbk.vercel.app",
+    featuredImage: "/images/acadops.png",
+    featured: true,
+  },
+  {
     id: "petcommunity",
     slug: "petcommunity",
-    number: "07",
+    number: "08",
     title: "PetCommunity",
     shortTitle: "PetCommunity",
     category: "Pet Networking Platform",
@@ -435,7 +489,7 @@ export const PROJECTS: readonly Project[] = [
   {
     id: "enils",
     slug: "enils",
-    number: "08",
+    number: "09",
     title: "ENILS",
     shortTitle: "ENILS",
     category: "Edge-Native Interactive Learning System",

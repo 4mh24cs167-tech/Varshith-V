@@ -112,7 +112,11 @@ export function Work() {
                 <div className="work-card-inner">
                   {/* Screenshot */}
                   <div className="work-card-visual">
-                    {Screenshot && <Screenshot />}
+                    {project.featuredImage ? (
+                      <img src={project.featuredImage} alt={`${project.title} screenshot`} className="work-card-img" loading="lazy" />
+                    ) : (
+                      Screenshot && <Screenshot />
+                    )}
                   </div>
 
                   {/* Card info */}

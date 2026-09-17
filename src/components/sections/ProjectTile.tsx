@@ -73,45 +73,15 @@ export function ProjectTile({
       <h3 className="pg-tile-title">{project.title}</h3>
       <p className="pg-tile-cat">{project.category}</p>
 
-      <div className="pg-tile-overlay">
-        <p className="pg-tile-desc">{project.description}</p>
-        <div className="pg-tile-tech">
-          {project.technologies.slice(0, 4).map((t) => (
-            <span key={t} className="tech-pill">
-              {t}
-            </span>
-          ))}
-          {project.technologies.length > 4 ? (
-            <span className="tech-pill tech-pill--more">
-              +{project.technologies.length - 4}
-            </span>
-          ) : null}
-        </div>
-        <div className="pg-tile-cta">
-          {project.liveUrl ? (
-            <a
-              className="project-link"
-              href={project.liveUrl}
-              target="_blank"
-              rel="noreferrer"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <span className="project-link-arrow">↗</span> VIEW LIVE
-            </a>
-          ) : null}
-          <button
-            type="button"
-            className="project-link project-link--cta"
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={(e) => {
-              e.stopPropagation();
-              onOpen(project.id);
-            }}
-          >
-            CASE STUDY <span className="project-link-arrow">→</span>
-          </button>
-        </div>
+      <div className="pg-tile-visual">
+        {project.featuredImage ? (
+          <img src={project.featuredImage} alt={`${project.title}`} className="pg-tile-img" loading="lazy" />
+        ) : (
+          <div className="pg-tile-placeholder">
+            <span className="pg-tile-placeholder-icon">🚀</span>
+            <span className="pg-tile-placeholder-text">View Project</span>
+          </div>
+        )}
       </div>
     </article>
   );

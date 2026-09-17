@@ -108,7 +108,7 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://uniconv-psi.vercel.app",
-    featuredImage: null,
+    featuredImage: "/images/uniconv.png",
     featured: true,
   },
   {
@@ -160,7 +160,7 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://mitm-rd.vercel.app",
-    featuredImage: null,
+    featuredImage: "/images/mrf-rd.png",
     featured: true,
   },
   {
@@ -212,7 +212,7 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://noc-portal-self.vercel.app",
-    featuredImage: null,
+    featuredImage: "/images/noc-portal.png",
     featured: true,
   },
   {
@@ -270,7 +270,7 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://eventflow-indol.vercel.app",
-    featuredImage: null,
+    featuredImage: "/images/eventflow.png",
     featured: true,
   },
   {
@@ -320,7 +320,7 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://reliefchain-pied.vercel.app",
-    featuredImage: null,
+    featuredImage: "/images/reliefchain.png",
     featured: true,
   },
   {
@@ -375,7 +375,7 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://mitm-placepro.vercel.app",
-    featuredImage: null,
+    featuredImage: "/images/placepro.png",
     featured: false,
   },
   {
@@ -429,7 +429,7 @@ export const PROJECTS: readonly Project[] = [
       },
     ],
     liveUrl: "https://petcommunity-puce.vercel.app",
-    featuredImage: null,
+    featuredImage: "/images/petcommunity.png",
     featured: false,
   },
   {

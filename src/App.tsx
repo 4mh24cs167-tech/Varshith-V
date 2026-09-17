@@ -4,22 +4,18 @@ import { MobileMenu } from "./components/layout/MobileMenu";
 import { Footer } from "./components/layout/Footer";
 import { PageTransition } from "./components/effects/PageTransition";
 import { EngineeringField } from "./components/effects/EngineeringField";
-import { TraceCursor } from "./components/effects/TraceCursor";
 import { Hero } from "./components/sections/Hero";
+import { StatementBand } from "./components/sections/StatementBand";
 import { About } from "./components/sections/About";
 import { YvbCo } from "./components/sections/YvbCo";
-import { StatementBand } from "./components/sections/StatementBand";
 import { Work } from "./components/sections/Work";
 import { Skills } from "./components/sections/Skills";
-import { TechMarquee } from "./components/sections/TechMarquee";
-import { Stats } from "./components/sections/Stats";
 import { Contact } from "./components/sections/Contact";
 import { useActiveSection } from "./hooks/useActiveSection";
 
 const SECTION_IDS = [
   "hero",
   "about",
-  "studio",
   "work",
   "skills",
   "contact",
@@ -44,7 +40,6 @@ function App() {
 
       <div className="app-backdrop" aria-hidden="true">
         <EngineeringField />
-        <TraceCursor />
       </div>
 
       <Navbar
@@ -57,22 +52,19 @@ function App() {
         open={menuOpen}
         onClose={closeMenu}
         triggerRef={menuTriggerRef}
-        activeSection={navActive}
       />
 
-      <main className="app-main" inert={menuOpen}>
+      <main className="app-main">
         <Hero />
         <StatementBand />
         <About />
         <YvbCo />
         <Work />
         <Skills />
-        <TechMarquee />
-        <Stats />
         <Contact />
       </main>
 
-      <Footer inert={menuOpen} />
+      <Footer />
     </div>
   );
 }

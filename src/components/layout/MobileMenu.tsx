@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
-import { NavLink } from "../ui/NavLink";
 import { NAV_ITEMS } from "./Navbar";
-import { GITHUB_ORG_URL, LINKEDIN_URL, EMAIL } from "../../data/site";
+import { EMAIL, GITHUB_ORG_URL, LINKEDIN_URL } from "../../data/site";
 
 type MobileMenuProps = {
   open: boolean;
@@ -11,9 +10,7 @@ type MobileMenuProps = {
   activeSection?: string | null;
 };
 
-const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-export function MobileMenu({ open, onClose, triggerRef, activeSection }: MobileMenuProps) {
+export function MobileMenu({ open, onClose, triggerRef }: MobileMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,10 +21,7 @@ export function MobileMenu({ open, onClose, triggerRef, activeSection }: MobileM
     document.documentElement.style.overflow = "hidden";
 
     const focusMenu = () => menu.focus({ preventScroll: true });
-    const onTransitionEnd = (event: TransitionEvent) => {
-      if (event.propertyName === "visibility") focusMenu();
-    };
-    menu.addEventListener("transitionend", onTransitionEnd);
+    menu.addEventListener("transitionend", focusMenu);
     const guard = window.setTimeout(focusMenu, 120);
 
     const onKey = (event: KeyboardEvent) => {
@@ -38,7 +32,7 @@ export function MobileMenu({ open, onClose, triggerRef, activeSection }: MobileM
       }
       if (event.key !== "Tab") return;
       const focusables = Array.from(
-        menu.querySelectorAll<HTMLElement>(FOCUSABLE),
+        menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
       ).filter((el) => el.offsetParent !== null || el === document.activeElement);
       if (!focusables.length) return;
       const first = focusables[0];
@@ -58,18 +52,17 @@ export function MobileMenu({ open, onClose, triggerRef, activeSection }: MobileM
 
     return () => {
       window.removeEventListener("keydown", onKey);
-      menu.removeEventListener("transitionend", onTransitionEnd);
+      menu.removeEventListener("transitionend", focusMenu);
       window.clearTimeout(guard);
       document.documentElement.style.overflow = prevOverflow;
       triggerRef.current?.focus();
     };
-  }, [open, onClose, triggerRef]);
+  }, [open, onClose]);
 
   if (!open) return null;
 
   return (
     <div
-      id="site-menu"
       ref={menuRef}
       tabIndex={-1}
       className="menu-overlay"
@@ -79,21 +72,18 @@ export function MobileMenu({ open, onClose, triggerRef, activeSection }: MobileM
       aria-label="Menu"
     >
       <div className="container">
-        <nav aria-label="Menu">
+        <nav aria-label="Menu" className="mobile-nav">
           <ul className="menu-list">
             {NAV_ITEMS.map((item) => (
               <li key={item.id}>
-                <NavLink
-                  variant="menu"
+                <a
                   href={`#${item.id}`}
-                  active={activeSection === item.id}
+                  className="menu-link"
                   onClick={onClose}
                 >
-                  <span className="nav-num tnum" aria-hidden="true">
-                    {item.num}
-                  </span>
+                  <span className="nav-num tnum">{item.num}</span>
                   {item.label}
-                </NavLink>
+                </a>
               </li>
             ))}
           </ul>

@@ -1,76 +1,67 @@
-import type { RefObject } from "react";
-import { cn } from "../../lib/cn";
-import { useScroll } from "../../hooks/useScroll";
-import { NavLink } from "../ui/NavLink";
-
-export const NAV_ITEMS = [
-  { id: "about", label: "About", num: "01" },
-  { id: "studio", label: "YVB&Co", num: "02" },
-  { id: "work", label: "Selected Works", num: "03" },
-  { id: "skills", label: "Skills", num: "04" },
-  { id: "contact", label: "Contact", num: "05" },
-] as const;
-
-export const NAV_IDS = NAV_ITEMS.map((item) => item.id);
+import { useState, useEffect } from "react";
+import { YVBCO_URL } from "../../data/site";
 
 type NavbarProps = {
-  activeSection?: string | null;
   menuOpen: boolean;
   onMenuToggle: () => void;
-  menuTriggerRef: RefObject<HTMLButtonElement | null>;
+  menuTriggerRef: React.RefObject<HTMLButtonElement | null>;
+  activeSection?: string | null;
 };
 
-export function Navbar({
-  activeSection,
-  menuOpen,
-  onMenuToggle,
-  menuTriggerRef,
-}: NavbarProps) {
-  const { scrolled } = useScroll();
-  const solid = scrolled || menuOpen;
+export const NAV_IDS = ["hero", "about", "work", "skills", "contact"] as const;
+export const NAV_ITEMS = [
+  { id: "hero", label: "HOME", num: "01" },
+  { id: "about", label: "ABOUT", num: "02" },
+  { id: "work", label: "WORK", num: "03" },
+  { id: "skills", label: "EXPERTISE", num: "04" },
+  { id: "contact", label: "CONTACT", num: "05" },
+] as const;
+
+export function Navbar({ menuOpen, onMenuToggle, menuTriggerRef, activeSection }: NavbarProps) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header
-      className={cn("site-header")}
-      data-solid={solid || undefined}
-      data-open={menuOpen || undefined}
-    >
-      <div className="container header-inner">
-        <a href="#top" className="wordmark" aria-label="VARSHITH, back to top">
-          VARSHITH<span className="wordmark-mark"> V</span>
+    <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
+      <div className="navbar-inner container">
+        <a href="#hero" className="navbar-logo">
+          <span className="navbar-logo-mark">YVB</span>
+          <span className="navbar-logo-amp">&amp;</span>
+          <span className="navbar-logo-co">CO</span>
         </a>
 
-        <nav className="nav-desktop" aria-label="Primary">
-          <ul className="nav-list">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.id}>
-                <NavLink href={`#${item.id}`} active={activeSection === item.id}>
-                  <span className="nav-num tnum" aria-hidden="true">
-                    {item.num}
-                  </span>
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
+        <nav className="navbar-nav" aria-label="Main">
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={`navbar-link ${activeSection === item.id ? "navbar-link--active" : ""}`}
+            >
+              <span className="navbar-link-num tnum">{item.num}</span>
+              {item.label}
+            </a>
+          ))}
         </nav>
 
-        <div className="header-actions">
+        <div className="navbar-actions">
+          <a href={YVBCO_URL} target="_blank" rel="noreferrer" className="navbar-link navbar-link--sm">
+            STUDIO
+          </a>
           <button
-            ref={menuTriggerRef}
             type="button"
-            className="hamburger"
-            aria-expanded={menuOpen}
-            aria-controls="site-menu"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            data-open={menuOpen || undefined}
+            className={`navbar-burger ${menuOpen ? "is-active" : ""}`}
             onClick={onMenuToggle}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            ref={menuTriggerRef}
           >
-            <span className="hamburger-lines" aria-hidden="true">
-              <span className="hamburger-line" />
-              <span className="hamburger-line" />
-              <span className="hamburger-line" />
-            </span>
+            <span className="navbar-burger-line" />
+            <span className="navbar-burger-line" />
           </button>
         </div>
       </div>

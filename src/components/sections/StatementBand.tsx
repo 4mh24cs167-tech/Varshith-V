@@ -1,30 +1,32 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { fadeUp, revealGroup } from "../../lib/motion";
+import { fadeUp } from "../../lib/motion";
+import { CGPA, ROLE_ORGS } from "../../data/site";
 
 export function StatementBand() {
   const reduce = useReducedMotion();
-  const anim = !reduce;
 
   return (
     <div className="statement-band">
-      <div className="container">
-        <motion.div
-          className="statement-band-inner"
-          initial={anim ? "hidden" : false}
-          whileInView={anim ? "show" : undefined}
-          viewport={{ once: true, margin: "-15% 0px" }}
-          variants={revealGroup}
-        >
-          <motion.p variants={fadeUp} className="statement-band-text">
-            Engineering is more than a degree.
-          </motion.p>
-          <motion.p variants={fadeUp} className="statement-band-text">
-            It&rsquo;s how I <em>build</em> — systems, products, teams.
-          </motion.p>
-        </motion.div>
-      </div>
+      <motion.div
+        variants={fadeUp}
+        initial={reduce ? false : "hidden"}
+        whileInView={reduce ? undefined : "show"}
+        viewport={{ once: true }}
+        className="statement-inner container"
+      >
+        <p className="statement-text">
+          <span className="statement-role">B.E. CSE</span>
+          <span className="statement-sep">&middot;</span>
+          <span className="statement-org">{ROLE_ORGS}</span>
+          <span className="statement-sep">&middot;</span>
+          <span className="statement-cgpa tnum">CGPA {CGPA}</span>
+          <span className="statement-sep">&middot;</span>
+          <span className="statement-status">
+            <span className="statement-dot" />
+            AVAILABLE FOR COLLABORATION
+          </span>
+        </p>
+      </motion.div>
     </div>
   );
 }
-
-export default StatementBand;

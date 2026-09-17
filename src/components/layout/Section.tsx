@@ -30,7 +30,7 @@ export function Section({
           observer.unobserve(el);
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -5% 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px -4% 0px" }
     );
 
     observer.observe(el);
@@ -41,11 +41,11 @@ export function Section({
     <section
       ref={ref}
       id={id}
-      className={cn("section", className)}
+      className={cn("section section--dark", className)}
       style={style}
       aria-labelledby={labelledBy}
     >
-      <div className="container">{children}</div>
+      {children}
     </section>
   );
 }

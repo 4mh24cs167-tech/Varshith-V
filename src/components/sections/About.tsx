@@ -1,58 +1,167 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Section } from "../layout/Section";
-import { fadeUp, revealGroup } from "../../lib/motion";
-import { CGPA, ROLE_ORGS } from "../../data/site";
+import { fadeUp, staggerFade } from "../../lib/motion";
+import { CGPA } from "../../data/site";
+
+const FEATURES = [
+  {
+    num: "01",
+    title: "Engineering",
+    desc: "Building practical software and scalable systems.",
+  },
+  {
+    num: "02",
+    title: "Problem Solving",
+    desc: "Tackling complex challenges with logical thinking.",
+  },
+  {
+    num: "03",
+    title: "Cybersecurity",
+    desc: "Securing systems and enabling safer technology.",
+  },
+  {
+    num: "04",
+    title: "Technology Leadership",
+    desc: "Driving technical direction and engineering decisions.",
+  },
+];
 
 export function About() {
   const reduce = useReducedMotion();
-  const anim = !reduce;
-  const facts = [
-    { label: "ROLE", value: "Full-Stack · 6 systems shipped" },
-    { label: "DEGREE", value: ROLE_ORGS },
-    { label: "CGPA", value: `${CGPA}` },
-  ];
 
   return (
-    <Section id="about" labelledBy="about-title" className="section--spacious">
-      <motion.div
-        className="about-grid"
-        initial={anim ? "hidden" : false}
-        whileInView={anim ? "show" : undefined}
-        viewport={{ once: true, margin: "-12% 0px" }}
-        variants={revealGroup}
-      >
-        <motion.div variants={fadeUp} className="about-text">
-          <div className="hero-eyebrow-row">
-            <span className="hero-eyebrow">Nice that you have found me.</span>
-          </div>
-          <p>
-            I&rsquo;m Varshith, a Computer Science &amp; Engineering student at
-            MITM. Most people call me a developer; I think of myself as someone
-            who turns problems into working systems. I&rsquo;ve shipped four
-            products from scratch — a file converter, a campus placement
-            portal, an event management platform, and a pet community app — and
-            I lead the engineering behind them.
-          </p>
-          <p>
-            My focus is full-stack engineering and AI-infused tooling: building
-            clean APIs, thoughtful databases, and interfaces that make complex
-            workflows feel simple. When I&rsquo;m not shipping, I&rsquo;m
-            experimenting with the next layer of automation and machine
-            learning.
-          </p>
-        </motion.div>
-
-        <motion.dl variants={fadeUp} className="about-facts">
-          {facts.map((f, i) => (
-            <div key={f.label} className="about-fact" style={{ animationDelay: `${i * 0.1}s` }}>
-              <dt className="about-fact-label">{f.label}</dt>
-              <dd className="about-fact-value">{f.value}</dd>
+    <Section id="about" className="about-section">
+      <div className="container">
+        <div className="about-grid">
+          {/* Left column */}
+          <div className="about-left">
+            <div className="about-header">
+              <motion.span
+                variants={fadeUp}
+                initial={reduce ? false : "hidden"}
+                whileInView={reduce ? undefined : "show"}
+                viewport={{ once: true }}
+                className="section-num"
+              >
+                01
+              </motion.span>
+              <motion.span
+                variants={fadeUp}
+                initial={reduce ? false : "hidden"}
+                whileInView={reduce ? undefined : "show"}
+                viewport={{ once: true }}
+                className="section-label"
+              >
+                ABOUT
+              </motion.span>
             </div>
-          ))}
-        </motion.dl>
-      </motion.div>
+
+            <motion.h2
+              variants={fadeUp}
+              initial={reduce ? false : "hidden"}
+              whileInView={reduce ? undefined : "show"}
+              viewport={{ once: true }}
+              className="about-title"
+            >
+              About the{" "}
+              <span className="text-accent">Engineer</span>
+            </motion.h2>
+
+            <motion.p
+              variants={fadeUp}
+              initial={reduce ? false : "hidden"}
+              whileInView={reduce ? undefined : "show"}
+              viewport={{ once: true }}
+              className="about-desc"
+            >
+              I'm a Computer Science Engineering student with an {CGPA} CGPA,
+              focused on building practical software, solving complex technical
+              problems, and continuously expanding my engineering capabilities.
+              From file converters to placement portals to event platforms, I
+              design and build software that works.
+            </motion.p>
+
+            <motion.a
+              variants={fadeUp}
+              initial={reduce ? false : "hidden"}
+              whileInView={reduce ? undefined : "show"}
+              viewport={{ once: true }}
+              href="#work"
+              className="about-link"
+            >
+              Learn more
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </motion.a>
+
+            {/* Feature grid */}
+            <motion.div
+              variants={staggerFade}
+              initial={reduce ? false : "hidden"}
+              whileInView={reduce ? undefined : "show"}
+              viewport={{ once: true }}
+              className="about-features"
+            >
+              {FEATURES.map((f) => (
+                <motion.div key={f.num} variants={fadeUp} className="about-feature">
+                  <div className="about-feature-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 6v6l4 2" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="about-feature-title">
+                      <span className="tnum">{f.num}</span> {f.title}
+                    </div>
+                    <p className="about-feature-desc">{f.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right column */}
+          <div className="about-right">
+            <motion.div
+              variants={fadeUp}
+              initial={reduce ? false : "hidden"}
+              whileInView={reduce ? undefined : "show"}
+              viewport={{ once: true }}
+              className="about-card about-card--quote"
+            >
+              <h3 className="about-card-title">Build</h3>
+              <h3 className="about-card-title">Solve</h3>
+              <h3 className="about-card-title about-card-title--accent">Improve</h3>
+              <p className="about-card-rule" />
+              <span className="about-card-num">// 01</span>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp}
+              initial={reduce ? false : "hidden"}
+              whileInView={reduce ? undefined : "show"}
+              viewport={{ once: true }}
+              className="about-card about-card--cgpa"
+            >
+              <div className="about-cgpa-chart">
+                {[40, 65, 55, 80, 70, 90, 85, 95].map((h, i) => (
+                  <div
+                    key={i}
+                    className="about-cgpa-bar"
+                    style={{ height: `${h}%`, animationDelay: `${i * 80}ms` }}
+                  />
+                ))}
+              </div>
+              <div>
+                <span className="about-cgpa-value tnum">{CGPA}</span>
+                <span className="about-cgpa-label">CGPA</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
     </Section>
   );
 }
-
-export default About;
